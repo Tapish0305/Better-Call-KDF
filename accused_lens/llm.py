@@ -9,7 +9,10 @@ if not __package__:
     import sys
     from pathlib import Path
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from llm_provider import create_client, completion_options
+if __package__:
+    from .llm_provider import create_client, completion_options
+else:
+    from llm_provider import create_client, completion_options
 
 
 class SummaryGenerationError(RuntimeError):

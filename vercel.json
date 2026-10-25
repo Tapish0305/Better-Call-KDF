@@ -1,0 +1,42 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "app": {
+      "root": ".",
+      "runtime": "python",
+      "entrypoint": "api:app",
+      "bindings": [
+        {
+          "type": "service",
+          "service": "accused_lens",
+          "format": "url",
+          "env": "ACCUSED_LENS_URL"
+        },
+        {
+          "type": "service",
+          "service": "victim_lens",
+          "format": "url",
+          "env": "VICTIM_LENS_URL"
+        }
+      ]
+    },
+    "accused_lens": {
+      "root": "accused_lens",
+      "runtime": "python",
+      "entrypoint": "api:app"
+    },
+    "victim_lens": {
+      "root": "victim_lens",
+      "runtime": "python",
+      "entrypoint": "api:app"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": {
+        "service": "app"
+      }
+    }
+  ]
+}

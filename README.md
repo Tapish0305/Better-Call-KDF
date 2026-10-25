@@ -59,6 +59,30 @@ cp .env.example .env
 Use the **root app.py** for centralized intake. Both standalone apps remain
 runnable from their own folders using their original instructions.
 
+## Vercel services deployment
+
+`vercel.json` defines three Python services. Vercel's public `/` route targets
+the `app` API gateway; `accused_lens` and `victim_lens` remain internal and are
+called by the gateway through service bindings. The ASGI APIs are in `api.py`
+at each service root. Existing Streamlit entrypoints remain available for local
+development, but Vercel deploys the JSON APIs rather than the Streamlit UI.
+
+Configure these Vercel environment variables for all three services:
+
+- `NYAYA_API_TOKEN`: a long, random bearer token required by the gateway and
+  internal APIs.
+- `LLM_API_KEY`: the LiteLLM key. `LLM_BASE_URL`, `LLM_MODEL`, and
+  `LLM_TEAM_CODE` are optional overrides.
+
+Vercel injects `ACCUSED_LENS_URL` and `VICTIM_LENS_URL` into the `app` service
+from its bindings. Do not create or populate these variables manually.
+Requests to the gateway use `Authorization: Bearer <NYAYA_API_TOKEN>`.
+The case endpoints are `POST /api/cases/{victim|accused}/{new|process|skip|next|report|summary}`;
+`POST /api/route` classifies the opening description. Case state is sent by the
+client on each request and is not persisted by these APIs. Treat case JSON and
+API tokens as sensitive, and configure production access controls before
+handling real client information.
+
 ## How it works
 
 ### Multilingual spoken questions
