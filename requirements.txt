@@ -1,0 +1,8 @@
+streamlit>=1.65,<2
+sarvamai==0.1.37
+pydantic>=2.9,<3
+openai>=2.54,<3
+python-dotenv>=1.0,<2
+pytest>=8,<10
+reportlab>=4.0,<6
+
